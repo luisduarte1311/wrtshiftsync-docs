@@ -9,7 +9,7 @@ O serviço é privado, mantido a título pessoal por Luís Duarte, fora do horá
 ## 2. Aviso de privacidade
 
 **Que dados trata**
-O PDF da escala que carregas (nomes, números de colaborador, secção, turnos, férias e ausências). Os dados servem apenas para gerar o ficheiro de calendário que pedes. O PDF é lido num ficheiro temporário em memória e apagado logo a seguir. Os dados extraídos ficam em memória durante 30 minutos e são depois eliminados. Não são guardados em base de dados nem em disco.
+O PDF da escala que carregas (nomes, números de colaborador, secção, turnos, férias e ausências). Os dados servem apenas para gerar o ficheiro de calendário que pedes. O PDF é lido num ficheiro temporário em memória e apagado logo a seguir. Os dados extraídos ficam em memória durante 30 minutos por sessão e são depois eliminados. Enquanto o serviço estiver em modo de compatibilidade, existe também uma cópia temporária em memória, sem prazo, que desaparece quando o serviço reinicia ou quando carregas outro PDF com a mesma chave. Não são guardados em base de dados nem em disco.
 
 **Registos técnicos**
 Os registos técnicos servem para segurança e prevenção de abuso. Neste momento o servidor não regista o endereço IP de quem o visita, porque a infraestrutura só vê o endereço interno do Docker. Os registos incluem data, caminho pedido e agente do browser e não têm um prazo fixo em dias. O código não escreve nomes nem números de colaborador nos registos; só o número de colaboradores lidos. Um erro inesperado ao ler o PDF pode, em teoria, deixar no registo um fragmento do texto que o provocou.
