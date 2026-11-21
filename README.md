@@ -9,7 +9,7 @@ Bem-vindo ao portal privado de sincronização de horários! Esta ferramenta foi
 A privacidade e a soberania sobre os teus dados são prioridades absolutas. Esta aplicação foi desenhada sob uma filosofia de **confiança zero para o exterior e controlo total para o utilizador**:
 
 - **Onde param os meus dados?** O PDF carregado é processado em tempo real e **eliminado de imediato** assim que a leitura termina: toca no disco só durante a leitura, num ficheiro temporário em memória. Os dados extraídos ficam apenas em memória, durante 30 minutos por sessão, e perdem-se também quando o serviço reinicia. Os horários não são guardados em base de dados, não existe histórico e nada é partilhado com terceiros. O código não escreve nomes nem números de colaborador nos registos.
-- **Transparência:** o tratamento de dados está descrito em `PRIVACIDADE.md` (inventário, prazos, base legal, direitos e incidentes).
+- **Transparência:** o tratamento de dados limita-se ao descrito nesta secção: o PDF é eliminado após a leitura, os dados extraídos existem apenas em memória e os horários não são guardados.
 - **Quem tem acesso?** O acesso ao pipeline é restrito e protegido por autenticação baseada em chave alfanumérica, com limitação do número de pedidos por minuto, sessões individuais com token e validade de 30 minutos, e limite de tamanho no upload.
 - **Compatibilidade Multiplataforma Inteligente:** Não é uma ferramenta só para iPhone. A interface adapta as instruções ao dispositivo:
   - **iPhone / iPad (Safari):** orienta o utilizador a adicionar a ferramenta ao ecrã principal como Web App (PWA) de acesso instantâneo.
