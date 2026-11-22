@@ -8,9 +8,9 @@ Bem-vindo ao portal privado de sincronização de horários! Esta ferramenta foi
 
 A privacidade e a soberania sobre os teus dados são prioridades absolutas. Esta aplicação foi desenhada sob uma filosofia de **confiança zero para o exterior e controlo total para o utilizador**:
 
-- **Onde param os meus dados?** O PDF carregado é processado em tempo real e **eliminado de imediato** assim que a leitura termina: toca no disco só durante a leitura, num ficheiro temporário em memória. Os dados extraídos ficam apenas em memória, durante 30 minutos por sessão, e perdem-se também quando o serviço reinicia. Os horários não são guardados em base de dados, não existe histórico e nada é partilhado com terceiros. O código não escreve nomes nem números de colaborador nos registos.
-- **Transparência:** o tratamento de dados limita-se ao descrito nesta secção: o PDF é eliminado após a leitura, os dados extraídos existem apenas em memória e os horários não são guardados. O aviso de privacidade completo está em [`PRIVACIDADE.md`](PRIVACIDADE.md).
-- **Quem tem acesso?** O acesso ao pipeline é restrito e protegido por autenticação baseada em chave alfanumérica, com limitação do número de pedidos por minuto, sessões individuais com token e validade de 30 minutos, e limite de tamanho no upload.
+- **Onde param os meus dados?** O PDF carregado é processado em tempo real e **eliminado de imediato** assim que a leitura termina: toca no disco só durante a leitura, num ficheiro temporário em memória. Os dados extraídos ficam apenas em memória, durante 30 minutos por sessão, e perdem-se também quando o serviço reinicia. Os horários não são guardados em base de dados, não existe histórico e nada é partilhado com terceiros. O código não escreve nomes nem números de colaborador nos registos (ver `PRIVACIDADE.md` para as exceções e prazos). Quem pede acesso pelo cartão "Pedir acesso" indica nome, loja e telemóvel; esses dados ficam guardados 60 dias (pedido pendente) ou 180 dias (chave entregue) e os administradores recebem-nos por WhatsApp.
+- **Transparência:** o tratamento de dados está descrito em [`PRIVACIDADE.md`](PRIVACIDADE.md) (inventário, prazos, base legal, direitos e incidentes).
+- **Quem tem acesso?** O acesso ao pipeline é restrito e protegido por autenticação baseada em chave alfanumérica, com limitação do número de pedidos por minuto, sessões individuais com token e validade de 30 minutos, e limite de tamanho no upload. Quem ainda não tem chave pede acesso no cartão "Pedir acesso"; um administrador avalia o pedido e entrega a chave por mensagem privada.
 - **Compatibilidade Multiplataforma Inteligente:** Não é uma ferramenta só para iPhone. A interface adapta as instruções ao dispositivo:
   - **iPhone / iPad (Safari):** orienta o utilizador a adicionar a ferramenta ao ecrã principal como Web App (PWA) de acesso instantâneo.
   - **iPhone / iPad (outro browser):** apresenta as instruções adequadas a esse caso.
@@ -37,12 +37,12 @@ As bibliotecas Python do motor do pipeline usam licenças permissivas (MIT, Apac
 - **Serviço auxiliar de webhooks:** **Flask** (BSD 3-Clause) com **Flask-Limiter** (MIT), integrado com a **Evolution API** e **PostgreSQL**, para a gestão de pedidos de acesso através do WhatsApp.
 
 ### 2. Infraestrutura & Serviços (*Self-Hosted*)
-O projeto corre como uma stack **Docker Compose** com seis serviços numa rede interna dedicada:
+O projeto corre como uma stack **Docker Compose** com seis serviços em redes Docker separadas por função (inclui uma rede interna só entre a web app e o serviço de webhooks):
 - **Web app (FastAPI/Uvicorn):** o motor de extração e geração do `.ics`.
 - **Proxy Reverso & Encriptação:** **Nginx Proxy Manager (NPM)** para terminação de SSL/TLS (certificados Let's Encrypt). Só as portas 80 e 443 estão expostas.
 - **DNS Dinâmico:** gestão de endereçamento dinâmico resiliente.
 - **Evolution API + PostgreSQL:** integração com o WhatsApp; a base de dados serve exclusivamente esta integração, guarda só a instância do WhatsApp (mensagens, chats e contactos não são guardados) e **não guarda horários**.
-- **Serviço de webhooks (Flask):** recebe eventos do grupo de acessos, regista o estado de cada pedido e notifica os administradores.
+- **Serviço de webhooks (Flask):** recebe eventos do grupo de acessos e os pedidos feitos pelo cartão do site (por uma rede interna só entre site e webhooks), regista o estado de cada pedido e notifica os administradores.
 - **Ambiente de Execução:** contentorização isolada via Docker.
 
 ### 3. Segurança & Configuração
@@ -50,7 +50,7 @@ O projeto corre como uma stack **Docker Compose** com seis serviços numa rede i
 - **Controlo de acesso:** autenticação por chave alfanumérica e limitação de pedidos por minuto, mais restritiva nos pontos de upload e validação da chave.
 - **Dados voláteis:** o PDF é guardado num ficheiro temporário (`/tmp` em memória) eliminado logo após a leitura, e os dados extraídos existem apenas em memória, em sessões com token e validade de 30 minutos.
 - **Parser isolado:** a leitura do PDF corre num subprocesso com limites de tempo, CPU e memória, e o upload tem tamanho máximo (3 MB por defeito).
-- **Webhook:** pedidos autenticados, comandos de admin só para administradores do grupo, gravação atómica do registo de membros e retenção de 60 e 180 dias.
+- **Webhook:** pedidos autenticados, comandos de admin só para administradores do grupo, gravação atómica do registo de membros e retenção de 60 e 180 dias; pedidos do site com chave interna, consentimento obrigatório e sem duplicados.
 - **Dados de infraestrutura fora do Git:** sessões do WhatsApp, base de dados e volumes do proxy não são versionados.
 - **Isolamento de Processos:** contentores sem root, com sistema de ficheiros só de leitura, sem capacidades Linux e com limites de memória e processos; redes Docker bridge separadas por função.
 
@@ -61,9 +61,11 @@ parser.py            ScheduleParser: extração e validação dos turnos a parti
 generator.py         CalendarGenerator: geração do ficheiro .ics
 templates/           Interface web (index.html)
 app.py               Serviço Flask de webhooks (integração WhatsApp / Evolution API)
+PRIVACIDADE.md       Inventário de dados, aviso de privacidade, direitos e incidentes
 Dockerfile           Imagem Python usada pela web app e pelo serviço de webhooks
 docker-compose.yml   Definição da stack completa
 requirements-*.in/.txt Dependências Python (web e webhook), com hashes
+security-todo/       Plano e registo da auditoria de segurança
 ```
 
 ### 5. Execução (administradores)
