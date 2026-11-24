@@ -78,6 +78,6 @@ security-todo/       Plano e registo da auditoria de segurança
 
 © **2026 Luís Duarte. Todos os direitos reservados.**
 
-- **Natureza Independente:** O **WrtShiftSync** é uma ferramenta utilitária independente, concebida e desenvolvida a título pessoal e em âmbito privado, fora do horário de trabalho, sem utilização de meios, informação ou instruções de qualquer entidade empregadora ou empresarial.
+- **Natureza Independente:** O **WrtShiftSync** é uma ferramenta utilitária independente, concebida e desenvolvida a título pessoal e em âmbito privado, fora do horário de trabalho, sem utilização de meios ou instruções de qualquer entidade empregadora ou empresarial. A ferramenta lê o formato do PDF da escala que o autor recebe enquanto colaborador; não contém nem acede a sistemas, dados ou documentação interna do empregador, e não é por este fornecida, avaliada ou aprovada.
 - **Isenção de Afiliação:** Este projeto não é endossado, patrocinado nem oficialmente afiliado a qualquer entidade, empresa ou marca, e não utiliza o nome de nenhuma.
 - **Proteção de Propriedade Intelectual:** Todos os direitos relativos à conceção do pipeline, arquitetura de parsing, código proprietário de suporte e identidade visual pertencem exclusivamente ao autor. A engenharia reversa, redistribuição não autorizada, descompilação ou integração corporativa sem consentimento prévio e expresso são estritamente proibidas nos termos da legislação aplicável.
